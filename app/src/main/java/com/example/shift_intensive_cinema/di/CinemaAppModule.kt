@@ -1,12 +1,16 @@
 package com.example.shift_intensive_cinema.di
 
 import com.example.shift_intensive_cinema.data.network.FilmApiService
+import com.example.shift_intensive_cinema.data.repository.FilmListRepositoryImpl
+import com.example.shift_intensive_cinema.domain.repository.FilmListRepository
+import com.example.shift_intensive_cinema.presentation.film.list.FilmListViewModel
 import com.example.shift_intensive_cinema.setSslSocketFactory
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
@@ -42,5 +46,13 @@ val cinemaAppModule = module {
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
             .create(FilmApiService::class.java)
+    }
+
+    single<FilmListRepository> {
+        FilmListRepositoryImpl(filmApiService = get())
+    }
+
+    viewModel {
+        FilmListViewModel(filmListRepository = get())
     }
 }
