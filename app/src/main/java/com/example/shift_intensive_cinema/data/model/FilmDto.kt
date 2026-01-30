@@ -9,6 +9,11 @@ data class FilmListResponse(
 )
 
 @Serializable
+data class FilmResponse(
+    val film: FilmDto,
+)
+
+@Serializable
 data class FilmDto(
     val id: String,
     val name: String,
