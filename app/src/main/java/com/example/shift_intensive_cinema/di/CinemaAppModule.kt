@@ -2,7 +2,10 @@ package com.example.shift_intensive_cinema.di
 
 import com.example.shift_intensive_cinema.data.network.FilmApiService
 import com.example.shift_intensive_cinema.data.repository.FilmListRepositoryImpl
+import com.example.shift_intensive_cinema.data.repository.FilmRepositoryImpl
 import com.example.shift_intensive_cinema.domain.repository.FilmListRepository
+import com.example.shift_intensive_cinema.domain.repository.FilmRepository
+import com.example.shift_intensive_cinema.presentation.film.info.FilmInfoViewModel
 import com.example.shift_intensive_cinema.presentation.film.list.FilmListViewModel
 import com.example.shift_intensive_cinema.setSslSocketFactory
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -52,7 +55,15 @@ val cinemaAppModule = module {
         FilmListRepositoryImpl(filmApiService = get())
     }
 
+    single<FilmRepository> {
+        FilmRepositoryImpl(filmApiService = get())
+    }
+
     viewModel {
         FilmListViewModel(filmListRepository = get())
+    }
+
+    viewModel { (filmId: String) ->
+        FilmInfoViewModel(filmRepository = get(), filmId = filmId)
     }
 }
